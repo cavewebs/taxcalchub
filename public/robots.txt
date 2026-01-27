@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://taxcalbase.com/sitemap.xml
+Sitemap: https://taxcalcbase.com/sitemap.xml

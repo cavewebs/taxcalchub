@@ -4,7 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description: "TaxCalBase terms of use and disclaimer.",
+  description: "TaxCalcBase terms of use and disclaimer.",
 };
 
 export default function TermsPage() {
@@ -20,7 +20,7 @@ export default function TermsPage() {
             Disclaimer
           </h2>
           <p>
-            The calculators and information provided on TaxCalBase are for
+            The calculators and information provided on TaxCalcBase are for
             general informational purposes only. They should not be considered
             financial, tax, or legal advice. While we strive for accuracy, tax
             laws and rates change frequently, and individual circumstances vary.
@@ -40,7 +40,7 @@ export default function TermsPage() {
             Limitation of Liability
           </h2>
           <p>
-            TaxCalBase shall not be liable for any losses or damages arising from
+            TaxCalcBase shall not be liable for any losses or damages arising from
             the use of information or calculators provided on this website. Users
             rely on the results at their own risk.
           </p>
@@ -49,7 +49,7 @@ export default function TermsPage() {
             Intellectual Property
           </h2>
           <p>
-            All content, design, and code on TaxCalBase is the property of the
+            All content, design, and code on TaxCalcBase is the property of the
             site owner. Unauthorized reproduction or distribution is prohibited.
           </p>
 

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
-const BASE_URL = "https://taxcalbase.com";
+const BASE_URL = "https://taxcalcbase.com";
 
 // Import data for dynamic routes - these will be resolved at build time
 // We hardcode the slugs here to avoid import issues in sitemap generation

@@ -89,9 +89,9 @@ export default function HomePage() {
         <AdPlaceholder slot="below-calculator" />
 
         <section className="mt-12 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Why Use TaxCalBase?</h2>
+          <h2 className="text-2xl font-bold mb-4">Why Use TaxCalcBase?</h2>
           <p className="text-gray-700 mb-4">
-            TaxCalBase provides free, accurate financial calculators designed for
+            TaxCalcBase provides free, accurate financial calculators designed for
             employees, freelancers, and small business owners. Whether you need
             to calculate your salary after tax, work out VAT on an invoice, or
             determine the right freelance rate for your skills, our tools
@@ -105,7 +105,7 @@ export default function HomePage() {
             any server.
           </p>
           <p className="text-gray-700">
-            Built for speed and simplicity, TaxCalBase works on any device.
+            Built for speed and simplicity, TaxCalcBase works on any device.
             Bookmark the calculators you use most and come back whenever you need
             a quick financial answer.
           </p>

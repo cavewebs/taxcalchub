@@ -9,16 +9,16 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: {
-    default: "TaxCalBase – Free Financial Calculators",
-    template: "%s | TaxCalBase",
+    default: "TaxCalcBase – Free Financial Calculators",
+    template: "%s | TaxCalcBase",
   },
   description:
     "Free online financial calculators for salary, tax, VAT, sales tax, and freelance rates. Calculate your take-home pay, tax obligations, and freelance earnings instantly.",
-  metadataBase: new URL("https://taxcalbase.com"),
+  metadataBase: new URL("https://taxcalcbase.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "TaxCalBase",
+    siteName: "TaxCalcBase",
   },
   robots: {
     index: true,

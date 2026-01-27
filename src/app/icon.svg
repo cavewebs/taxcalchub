@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#166534"/>
+  <rect x="6" y="5" width="20" height="8" rx="2" fill="#bbf7d0"/>
+  <text x="16" y="11.5" font-family="system-ui,sans-serif" font-size="7" font-weight="700" fill="#166534" text-anchor="middle" dominant-baseline="middle">TC</text>
+  <circle cx="9.5" cy="19" r="1.6" fill="#bbf7d0"/>
+  <circle cx="16" cy="19" r="1.6" fill="#bbf7d0"/>
+  <circle cx="22.5" cy="19" r="1.6" fill="#bbf7d0"/>
+  <circle cx="9.5" cy="24.5" r="1.6" fill="#bbf7d0"/>
+  <circle cx="16" cy="24.5" r="1.6" fill="#bbf7d0"/>
+  <rect x="20.5" y="22.9" width="4" height="3.2" rx="1" fill="#bbf7d0"/>
+</svg>

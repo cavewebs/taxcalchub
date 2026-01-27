@@ -36,22 +36,30 @@ export default async function CountrySalaryAfterTaxPage({ params }: PageProps) {
     notFound();
   }
 
+  const hasPA = country.personalAllowance > 0;
+
   const faqs = [
     {
       question: `How is income tax calculated in ${country.name}?`,
-      answer: `Income tax in ${country.name} is calculated using a progressive bracket system. Your taxable income (after the personal allowance of ${country.currencySymbol}${country.personalAllowance.toLocaleString()}) is divided into brackets, each taxed at a different marginal rate. The calculator above applies ${country.name}'s official tax brackets to determine your total income tax liability.`,
+      answer: hasPA
+        ? `Income tax in ${country.name} is calculated using a progressive bracket system. Your taxable income (after the personal allowance of ${country.currencySymbol}${country.personalAllowance.toLocaleString()}) is divided into brackets, each taxed at a different marginal rate. The calculator above applies ${country.name}'s official tax brackets to determine your total income tax liability.`
+        : `Income tax in ${country.name} is calculated using a progressive bracket system. Your income is divided into brackets, each taxed at a different marginal rate. The calculator above applies ${country.name}'s official tax brackets to determine your total income tax liability.`,
     },
-    {
-      question: `What is the personal allowance in ${country.name}?`,
-      answer: `The personal allowance in ${country.name} is ${country.currencySymbol}${country.personalAllowance.toLocaleString()}. This is the amount of income you can earn before income tax begins to apply. Income earned above this threshold is subject to tax at the applicable marginal rates.`,
-    },
+    ...(hasPA
+      ? [
+          {
+            question: `What is the personal allowance in ${country.name}?`,
+            answer: `The personal allowance in ${country.name} is ${country.currencySymbol}${country.personalAllowance.toLocaleString()}. This is the amount of income you can earn before income tax begins to apply. Income earned above this threshold is subject to tax at the applicable marginal rates.`,
+          },
+        ]
+      : []),
     {
       question: `What are the ${country.socialSecurityLabel} contributions in ${country.name}?`,
       answer: `${country.socialSecurityLabel} contributions in ${country.name} are calculated using official thresholds and rates that may vary at different income levels. These contributions fund public programs such as pensions, healthcare, and unemployment insurance. The calculator above applies the correct bracket-based rates to determine your total ${country.socialSecurityLabel} liability.`,
     },
     {
       question: `How much will I take home on a ${country.currencySymbol}50,000 salary in ${country.name}?`,
-      answer: `Use the calculator above to see an exact breakdown. Enter ${country.currencySymbol}50,000 as your annual salary, and the calculator will apply ${country.name}'s income tax brackets and ${country.socialSecurityLabel} rate to show your net take-home pay, total deductions, and effective tax rate.`,
+      answer: `Use the calculator above to see an exact breakdown. Enter ${country.currencySymbol}50,000 as your annual salary, and the calculator will apply ${country.name}'s income tax brackets and ${country.socialSecurityLabel} contributions to show your net take-home pay, total deductions, and tax rate.`,
     },
   ];
 
@@ -97,12 +105,23 @@ export default async function CountrySalaryAfterTaxPage({ params }: PageProps) {
             accurate budgeting.
           </p>
           <p>
-            {country.name} provides a personal allowance of{" "}
-            {country.currencySymbol}
-            {country.personalAllowance.toLocaleString()}, meaning income below
-            this threshold is not subject to income tax. Beyond the personal
-            allowance, your earnings are taxed according to the country&apos;s
-            official tax brackets. In addition, {country.socialSecurityLabel}
+            {hasPA ? (
+              <>
+                {country.name} provides a personal allowance of{" "}
+                {country.currencySymbol}
+                {country.personalAllowance.toLocaleString()}, meaning income below
+                this threshold is not subject to income tax. Beyond the personal
+                allowance, your earnings are taxed according to the country&apos;s
+                official tax brackets.
+              </>
+            ) : (
+              <>
+                {country.name} applies its progressive tax brackets directly to
+                your income, with a tax-free threshold built into the rate
+                structure.
+              </>
+            )}
+            {" "}In addition, {country.socialSecurityLabel}
             {" "}contributions are deducted from your gross salary based on
             official thresholds and rates to fund public services such as
             pensions and healthcare.

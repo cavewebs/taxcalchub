@@ -23,6 +23,7 @@ export default function SalaryAfterTaxCalculator({
   const [results, setResults] = useState<{
     gross: number;
     personalAllowance: number;
+    taxableIncome: number;
     incomeTax: number;
     socialSecurity: number;
     net: number;
@@ -55,12 +56,11 @@ export default function SalaryAfterTaxCalculator({
     const net = annualSalary - incomeTax - socialSecurity;
     const taxRate = getMarginalRate(annualSalary, bracketsWithMax, selectedCountry.personalAllowance);
 
+    const pa = Math.min(selectedCountry.personalAllowance, annualSalary);
     setResults({
       gross: annualSalary,
-      personalAllowance: Math.min(
-        selectedCountry.personalAllowance,
-        annualSalary
-      ),
+      personalAllowance: pa,
+      taxableIncome: Math.max(0, annualSalary - pa),
       incomeTax,
       socialSecurity,
       net,
@@ -149,6 +149,12 @@ export default function SalaryAfterTaxCalculator({
                 </p>
               </div>
             )}
+            <div className="rounded-lg bg-muted p-4">
+              <p className="text-sm text-muted-foreground">Taxable Income</p>
+              <p className="text-xl font-bold text-foreground">
+                {formatCurrency(results.taxableIncome, sym)}
+              </p>
+            </div>
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm text-muted-foreground">Income Tax</p>
               <p className="text-xl font-bold text-foreground">

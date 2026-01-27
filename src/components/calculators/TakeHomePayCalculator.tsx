@@ -12,6 +12,7 @@ export default function TakeHomePayCalculator() {
   const [results, setResults] = useState<{
     grossAnnual: number;
     personalAllowance: number;
+    taxableIncome: number;
     incomeTaxAnnual: number;
     socialSecurityAnnual: number;
     netAnnual: number;
@@ -44,12 +45,11 @@ export default function TakeHomePayCalculator() {
     const netAnnual = annualSalary - incomeTax - socialSecurity;
     const taxRate = getMarginalRate(annualSalary, bracketsWithMax, selectedCountry.personalAllowance);
 
+    const pa = Math.min(selectedCountry.personalAllowance, annualSalary);
     setResults({
       grossAnnual: annualSalary,
-      personalAllowance: Math.min(
-        selectedCountry.personalAllowance,
-        annualSalary
-      ),
+      personalAllowance: pa,
+      taxableIncome: Math.max(0, annualSalary - pa),
       incomeTaxAnnual: incomeTax,
       socialSecurityAnnual: socialSecurity,
       netAnnual,
@@ -136,6 +136,12 @@ export default function TakeHomePayCalculator() {
                 </p>
               </div>
             )}
+            <div className="rounded-lg bg-muted p-4">
+              <p className="text-sm text-muted-foreground">Taxable Income</p>
+              <p className="text-xl font-bold text-foreground">
+                {formatCurrency(results.taxableIncome, sym)}
+              </p>
+            </div>
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm text-muted-foreground">Income Tax</p>
               <p className="text-xl font-bold text-foreground">

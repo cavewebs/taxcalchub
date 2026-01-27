@@ -18,20 +18,22 @@ export interface Country {
   socialSecurityLabel: string;
   /** Social security brackets — same structure as income tax brackets */
   socialSecurityBrackets: TaxBracket[];
-  /** Income tax brackets in local currency */
+  /** Income tax brackets applied to TAXABLE income (after personalAllowance) */
   taxBrackets: TaxBracket[];
 }
 
 export const countries: Country[] = [
   {
-    // 2026 US federal tax brackets (single filer) — standard deduction $16,100
+    // 2025 US federal tax brackets (single filer)
+    // Standard deduction $15,750 (OBBB Act, signed July 2025)
     // FICA: Social Security 6.2% on first $176,100 + Medicare 1.45% uncapped
     // + Additional Medicare 0.9% above $200,000
+    // Brackets are on TAXABLE income (after standard deduction)
     slug: "us",
     name: "United States",
     currency: "USD",
     currencySymbol: "$",
-    personalAllowance: 16100,
+    personalAllowance: 15750,
     socialSecurityLabel: "FICA (Social Security & Medicare)",
     socialSecurityBrackets: [
       { min: 0, max: 176100, rate: 0.0765 },
@@ -39,17 +41,24 @@ export const countries: Country[] = [
       { min: 200000, max: null, rate: 0.0235 },
     ],
     taxBrackets: [
-      { min: 0, max: 12400, rate: 0.10 },
-      { min: 12400, max: 50400, rate: 0.12 },
-      { min: 50400, max: 105700, rate: 0.22 },
-      { min: 105700, max: 201775, rate: 0.24 },
-      { min: 201775, max: 256225, rate: 0.32 },
-      { min: 256225, max: 640600, rate: 0.35 },
-      { min: 640600, max: null, rate: 0.37 },
+      { min: 0, max: 11925, rate: 0.10 },
+      { min: 11925, max: 48475, rate: 0.12 },
+      { min: 48475, max: 103350, rate: 0.22 },
+      { min: 103350, max: 197300, rate: 0.24 },
+      { min: 197300, max: 250525, rate: 0.32 },
+      { min: 250525, max: 626350, rate: 0.35 },
+      { min: 626350, max: null, rate: 0.37 },
     ],
   },
   {
     // 2025-26 UK — personal allowance £12,570 (frozen until 2028)
+    // Source: gov.uk/income-tax-rates
+    // Bands on total income: PA up to £12,570, Basic £12,571-£50,270,
+    //   Higher £50,271-£125,140, Additional over £125,140
+    // Brackets here are on TAXABLE income (after PA):
+    //   Basic: 0-37,700 (= 50,270 - 12,570)
+    //   Higher: 37,700-112,570 (= 125,140 - 12,570)
+    //   Additional: over 112,570
     // NI: 8% between PT (£12,570) and UEL (£50,270), 2% above UEL
     slug: "uk",
     name: "United Kingdom",
@@ -64,44 +73,49 @@ export const countries: Country[] = [
     ],
     taxBrackets: [
       { min: 0, max: 37700, rate: 0.20 },
-      { min: 37700, max: 125140, rate: 0.40 },
-      { min: 125140, max: null, rate: 0.45 },
+      { min: 37700, max: 112570, rate: 0.40 },
+      { min: 112570, max: null, rate: 0.45 },
     ],
   },
   {
-    // 2026 Canada federal — lowest rate 14%, BPA $16,452
-    // CPP1: 5.95% on earnings $3,500–$74,600
-    // CPP2: 4.00% on earnings $74,600–$85,000
-    // EI: 1.63% on earnings $0–$68,900
-    // Simplified into combined brackets
+    // 2025 Canada federal — BPA $16,129 (indexed for 2025)
+    // Source: canada.ca/en/revenue-agency
+    // Effective 2025 lowest rate: 14.5% (14% from July 1, blended)
+    // Brackets are on TAXABLE income (after BPA)
+    // CPP1: 5.95% on earnings $3,500–$71,300 (2025)
+    // CPP2: 4.00% on earnings $71,300–$81,200
+    // EI: 1.64% on earnings $0–$65,700
     slug: "canada",
     name: "Canada",
     currency: "CAD",
     currencySymbol: "$",
-    personalAllowance: 16452,
+    personalAllowance: 16129,
     socialSecurityLabel: "CPP & EI Contributions",
     socialSecurityBrackets: [
-      { min: 0, max: 3500, rate: 0.0163 },
-      { min: 3500, max: 68900, rate: 0.0758 },
-      { min: 68900, max: 74600, rate: 0.0595 },
-      { min: 74600, max: 85000, rate: 0.04 },
+      { min: 0, max: 3500, rate: 0.0164 },
+      { min: 3500, max: 65700, rate: 0.0759 },
+      { min: 65700, max: 71300, rate: 0.0595 },
+      { min: 71300, max: 81200, rate: 0.04 },
     ],
     taxBrackets: [
-      { min: 0, max: 58523, rate: 0.14 },
-      { min: 58523, max: 117045, rate: 0.205 },
-      { min: 117045, max: 181440, rate: 0.26 },
-      { min: 181440, max: 258482, rate: 0.29 },
-      { min: 258482, max: null, rate: 0.33 },
+      { min: 0, max: 57375, rate: 0.145 },
+      { min: 57375, max: 114750, rate: 0.205 },
+      { min: 114750, max: 177882, rate: 0.26 },
+      { min: 177882, max: 253414, rate: 0.29 },
+      { min: 253414, max: null, rate: 0.33 },
     ],
   },
   {
-    // 2025-26 Australia — Stage 3 tax cuts, tax-free threshold $18,200
+    // 2024-25 / 2025-26 Australia — Stage 3 tax cuts
+    // Source: ato.gov.au/tax-rates-and-codes/tax-rates-australian-residents
+    // Brackets are on TOTAL income (0% band acts as tax-free threshold)
+    // personalAllowance = 0 because the 0% bracket handles the tax-free threshold
     // Medicare levy 2% on all income (low-income exemption ignored for simplicity)
     slug: "australia",
     name: "Australia",
     currency: "AUD",
     currencySymbol: "$",
-    personalAllowance: 18200,
+    personalAllowance: 0,
     socialSecurityLabel: "Medicare Levy",
     socialSecurityBrackets: [
       { min: 0, max: null, rate: 0.02 },
@@ -115,30 +129,37 @@ export const countries: Country[] = [
     ],
   },
   {
-    // 2026 Germany — Grundfreibetrag €12,348
-    // Employee social insurance: health 7.3% + avg supplement 1.45% +
-    //   pension 9.3% + unemployment 1.3% + care 1.7% (with child) = ~21.05%
-    // Capped at Beitragsbemessungsgrenze: health/care €69,750, pension €101,400
+    // 2025 Germany — Grundfreibetrag €12,096
+    // Source: taxsummaries.pwc.com/germany
+    // Germany uses a progressive formula (not flat steps) in zones 2 & 3.
+    // Simplified to average marginal rates per zone.
+    // Brackets are on TOTAL income (0% band acts as Grundfreibetrag)
+    // personalAllowance = 0 because the 0% bracket handles the tax-free threshold
+    // Employee social insurance: health ~8.75% + pension 9.3% + unemployment 1.3%
+    //   + care 1.7% = ~21.05%. Capped at BBG: health/care €69,300, pension €96,600
     slug: "germany",
     name: "Germany",
     currency: "EUR",
     currencySymbol: "\u20AC",
-    personalAllowance: 12348,
+    personalAllowance: 0,
     socialSecurityLabel: "Sozialversicherung (Social Insurance)",
     socialSecurityBrackets: [
-      { min: 0, max: 69750, rate: 0.2105 },
-      { min: 69750, max: 101400, rate: 0.106 },
+      { min: 0, max: 69300, rate: 0.2105 },
+      { min: 69300, max: 96600, rate: 0.106 },
     ],
     taxBrackets: [
-      { min: 0, max: 12348, rate: 0.0 },
-      { min: 12348, max: 17799, rate: 0.14 },
-      { min: 17799, max: 69878, rate: 0.2397 },
-      { min: 69878, max: 277825, rate: 0.42 },
+      { min: 0, max: 12096, rate: 0.0 },
+      { min: 12096, max: 17005, rate: 0.14 },
+      { min: 17005, max: 68480, rate: 0.2397 },
+      { min: 68480, max: 277825, rate: 0.42 },
       { min: 277825, max: null, rate: 0.45 },
     ],
   },
   {
-    // 2025/2026 France — barème for 2025 income (declared 2026)
+    // 2025 France — barème for 2024 income (declared 2025)
+    // Source: service-public.gouv.fr
+    // Brackets are per part of quotient familial, on TOTAL income
+    // personalAllowance = 0 because the 0% bracket handles the threshold
     // Employee contributions: CSG 9.2% + CRDS 0.5% (on 98.25% of gross) +
     //   old-age 6.9% capped + 0.4% uncapped + pension ~4.01% capped
     // Simplified: ~22% up to annual ceiling €48,060, ~10.5% above
@@ -146,7 +167,7 @@ export const countries: Country[] = [
     name: "France",
     currency: "EUR",
     currencySymbol: "\u20AC",
-    personalAllowance: 11497,
+    personalAllowance: 0,
     socialSecurityLabel: "Cotisations Sociales (Social Contributions)",
     socialSecurityBrackets: [
       { min: 0, max: 48060, rate: 0.22 },
@@ -161,21 +182,24 @@ export const countries: Country[] = [
     ],
   },
   {
-    // 2025/2026 Ireland — standard rate band €44,000 (single)
-    // Personal tax credit €2,000 + PAYE credit €2,000 = effective allowance ~€18,750
+    // 2025 Ireland — standard rate band €44,000 (single)
+    // Source: revenue.ie
+    // Personal tax credit €2,000 + PAYE credit €2,000 = effective allowance ~€20,000
+    // Brackets are on TOTAL income, credits reduce the tax owed
+    // personalAllowance approximated from combined credits
     // PRSI: 4.2% on all earnings above €352/week (≈€18,304/year)
-    // USC: 0.5% up to €12,012, 2% to €28,700, 3% to €70,044, 8% above
+    // USC 2025: 0.5% up to €12,012, 2% to €27,382, 3% to €70,044, 8% above
     slug: "ireland",
     name: "Ireland",
     currency: "EUR",
     currencySymbol: "\u20AC",
-    personalAllowance: 18750,
+    personalAllowance: 20000,
     socialSecurityLabel: "PRSI & USC",
     socialSecurityBrackets: [
       { min: 0, max: 12012, rate: 0.005 },
       { min: 12012, max: 18304, rate: 0.02 },
-      { min: 18304, max: 28700, rate: 0.062 },
-      { min: 28700, max: 70044, rate: 0.072 },
+      { min: 18304, max: 27382, rate: 0.062 },
+      { min: 27382, max: 70044, rate: 0.072 },
       { min: 70044, max: null, rate: 0.122 },
     ],
     taxBrackets: [
@@ -184,10 +208,11 @@ export const countries: Country[] = [
     ],
   },
   {
-    // 2026 Netherlands Box 1 — combined income tax + social insurance in brackets
+    // 2025 Netherlands Box 1 — combined income tax + social insurance in brackets
+    // Source: belastingdienst.nl
     // Social insurance (27.65%) is baked into the first bracket rate
     // No separate personal allowance (tax credits applied instead)
-    // Since SS is included in the tax brackets, SS brackets are zero
+    // Since SS is included in the tax brackets, SS brackets are empty
     slug: "netherlands",
     name: "Netherlands",
     currency: "EUR",
@@ -196,14 +221,16 @@ export const countries: Country[] = [
     socialSecurityLabel: "Sociale Verzekeringen (Social Insurance)",
     socialSecurityBrackets: [],
     taxBrackets: [
-      { min: 0, max: 38883, rate: 0.3575 },
-      { min: 38883, max: 78426, rate: 0.3756 },
-      { min: 78426, max: null, rate: 0.495 },
+      { min: 0, max: 38441, rate: 0.3582 },
+      { min: 38441, max: 76817, rate: 0.3748 },
+      { min: 76817, max: null, rate: 0.495 },
     ],
   },
   {
-    // 2025/2026 Spain — IRPF national brackets unchanged
-    // Personal allowance €5,550
+    // 2025 Spain — IRPF national brackets
+    // Source: taxsummaries.pwc.com/spain
+    // Personal minimum allowance €5,550
+    // Brackets are on TAXABLE income (after personal minimum)
     // Employee SS: 6.48% on earnings up to max base €4,909.50/month (€58,914/year)
     slug: "spain",
     name: "Spain",
@@ -224,14 +251,17 @@ export const countries: Country[] = [
     ],
   },
   {
-    // 2026 Italy — IRPEF 3 brackets, 2nd bracket reduced 35% -> 33%
-    // No-tax area for employees ≈ €8,500
+    // 2025 Italy — IRPEF 3 brackets (structural from 2024 Budget Law)
+    // Source: taxsummaries.pwc.com/italy
+    // No-tax area for employees handled via credits, not a direct PA
+    // Brackets are on TOTAL income
+    // personalAllowance = 0 (credits handle the no-tax area)
     // INPS employee: 9.19% up to €55,448, 10.19% above (up to €120,607)
     slug: "italy",
     name: "Italy",
     currency: "EUR",
     currencySymbol: "\u20AC",
-    personalAllowance: 8500,
+    personalAllowance: 0,
     socialSecurityLabel: "INPS (Contributi Previdenziali)",
     socialSecurityBrackets: [
       { min: 0, max: 55448, rate: 0.0919 },
@@ -239,19 +269,22 @@ export const countries: Country[] = [
     ],
     taxBrackets: [
       { min: 0, max: 28000, rate: 0.23 },
-      { min: 28000, max: 50000, rate: 0.33 },
+      { min: 28000, max: 50000, rate: 0.35 },
       { min: 50000, max: null, rate: 0.43 },
     ],
   },
   {
-    // FY 2025-26 India new tax regime — basic exemption ₹4,00,000
-    // Standard deduction ₹75,000 built into personalAllowance
+    // FY 2025-26 India new tax regime
+    // Source: incometax.gov.in
+    // Basic exemption ₹4,00,000 is built into the 0% slab
+    // Standard deduction ₹75,000 for salaried — modeled as personalAllowance
+    // Brackets are on TOTAL income (0% band handles basic exemption)
     // EPF: 12% on basic salary (simplified as 12% up to ₹15,000/month = ₹180,000/year cap)
     slug: "india",
     name: "India",
     currency: "INR",
     currencySymbol: "\u20B9",
-    personalAllowance: 475000,
+    personalAllowance: 75000,
     socialSecurityLabel: "EPF (Employee Provident Fund)",
     socialSecurityBrackets: [
       { min: 0, max: 180000, rate: 0.12 },
@@ -267,14 +300,18 @@ export const countries: Country[] = [
     ],
   },
   {
-    // 2025/2026 Singapore — YA 2026 rates unchanged
-    // CPF employee 20% on OW up to $8,000/month ($96,000/year)
+    // 2025/2026 Singapore — YA 2025/2026 rates (from YA 2024 onwards)
+    // Source: iras.gov.sg
+    // Brackets are on chargeable income (after reliefs/deductions)
+    // The 0% band up to $20,000 acts as the tax-free threshold
+    // personalAllowance = 0 because the 0% bracket handles the threshold
+    // CPF employee 20% on OW up to $6,800/month ($81,600/year)
     // Total annual cap $102,000 including AW
     slug: "singapore",
     name: "Singapore",
     currency: "SGD",
     currencySymbol: "$",
-    personalAllowance: 20000,
+    personalAllowance: 0,
     socialSecurityLabel: "CPF (Central Provident Fund)",
     socialSecurityBrackets: [
       { min: 0, max: 102000, rate: 0.20 },
